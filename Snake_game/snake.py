@@ -1,6 +1,7 @@
 import pygame
 from cube import Cube
 
+
 class Snake:
     body = []
     turns = {}
@@ -67,9 +68,9 @@ class Snake:
         self.body[-1].direction_x = direction_x
         self.body[-1].direction_y = direction_y
 
-    def draw(self, surface):
+    def draw(self, surface, pmap):
         for iteration, cube in enumerate(self.body):
             if iteration == 0:
-                cube.draw(surface, True)  # Head -> body with eyes
+                cube.draw(surface, pmap, True)  # Head -> body with eyes
             else:
-                cube.draw(surface)
+                cube.draw(surface, pmap)

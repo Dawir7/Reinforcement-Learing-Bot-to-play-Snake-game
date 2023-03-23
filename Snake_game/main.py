@@ -40,7 +40,7 @@ def keyboard_input(snake: Snake):  # ToDo:
 def redraw_window(win, snake, playground):
     win.fill((255, 255, 255))
     playground.draw(win)
-    snake.draw(win)
+    snake.draw(win, playground)
     pygame.display.update()  # This updates the screen so we can see our rectangle
 
 

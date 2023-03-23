@@ -38,10 +38,10 @@ class Map:
                 break
 
 
-def main():  # just for checking if that class works fine
-    mapa = Map()
-    print(mapa.pmap)
-
-
-if __name__ == "__main__":
-    main()
+# def main():  # just for checking if that class works fine
+#     mapa = Map()
+#     print(mapa.pmap)
+#
+#
+# if __name__ == "__main__":
+#     main()
