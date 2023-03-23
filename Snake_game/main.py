@@ -37,14 +37,14 @@ def keyboard_input(snake: Snake):  # ToDo:
                 snake.turns[snake.head.position] = [snake.direction_x, snake.direction_y]
 
 
-def redraw_window(surface):
-    pass
+def redraw_window(win, snake, playground):
+    win.fill((0, 0, 0))
+    playground.draw(win)
+    snake.draw(win)
+    pygame.display.update()  # This updates the screen so we can see our rectangle
 
 
 def main():
-    # width, rows, s, snack
-    width = 500
-    rows = 20
     win = pygame.display.set_mode((width, width))
     snake = Snake()
     # snack = Cube(Map.RandomSnack(rows, s), color=(255, 0, 0))

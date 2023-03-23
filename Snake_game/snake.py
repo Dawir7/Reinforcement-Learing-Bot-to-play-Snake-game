@@ -12,35 +12,33 @@ class Snake:
         self.direction_y = 1
 
     def move(self):
-        # Lecimy po wszystkich kostkach i ruszamy je odpowiednio.
+        # We are iterating through a cubes and move them.
+        # Jeśli w danej pozycji użytkownik dokonał skrętu to w niej kostka musi skręcić,
+        # jeśli to ostatni kostka usuwamy zakręt.
         for iteration, cube in enumerate(self.body):
-            position = cube.position[:]  # ???
-
-            # Jeśli w danej pozycji użytkownik dokonał skrętu to w niej kostka musi skręcić,
-            # jeśli to ostatni kostka usuwamy zakręt.
-            if position in self.turns:
-                turn = self.turns[position]
+            if cube.position in self.turns.keys():
+                turn = self.turns[cube.position]
                 cube.direction_x = turn[0]
                 cube.direction_y = turn[1]
                 cube.move()
                 if iteration == len(self.body) - 1:
-                    self.turns.pop(position)
+                    self.turns.pop(cube.position)
             else:
-                cube.move()  # Normalne przemieszczenie.
+                cube.move()
 
     def collision(self) -> bool:
         for cube in self.body:
-            if cube.direction_x == -1 and cube.position[0] <= 0:  # Transport z lewej ściany mapy.
+            if cube.direction_x == -1 and cube.position[0] <= 0:  # Hit the left wall.
                 return True
-            elif cube.direction_x == 1 and cube.position[0] >= cube.rows - 1:  # Transport z prawej ściany mapy.
+            elif cube.direction_x == 1 and cube.position[0] >= cube.rows - 1:  # Hit the right wall.
                 return True
-            elif cube.direction_y == 1 and cube.position[1] >= cube.rows - 1:  # Transport z dołu mapy.
+            elif cube.direction_y == 1 and cube.position[1] >= cube.rows - 1:  # Hit the bottom.
                 return True
-            elif cube.direction_y == -1 and cube.position[1] <= 0:  # Transport z góry mapy.
+            elif cube.direction_y == -1 and cube.position[1] <= 0:  # Hit the celling.
                 return True
             else:
                 for other_cube in self.body:
-                    if other_cube.position == cube.position:
+                    if other_cube.position == cube.position:  # Hit himself.
                         return True
 
         return False
