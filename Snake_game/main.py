@@ -38,26 +38,32 @@ def keyboard_input(snake: Snake):  # ToDo:
 
 
 def redraw_window(win, snake, playground):
-    win.fill((0, 0, 0))
+    win.fill((255, 255, 255))
     playground.draw(win)
     snake.draw(win)
     pygame.display.update()  # This updates the screen so we can see our rectangle
 
 
 def main():
-    win = pygame.display.set_mode((width, width))
-    snake = Snake()
+    playground = Map()
+    win = pygame.display.set_mode((playground.map_size, playground.map_size))
+
+    snake = Snake((0, 10))
     # snack = Cube(Map.RandomSnack(rows, s), color=(255, 0, 0))
     run = True
     clock = pygame.time.Clock()
     while run:
         pygame.time.delay(100)
         clock.tick(30)
-        snake.move()
+        # snake.move()
 
-        if snake.body[0].position == snack.position:
-            snake.add_cube()
-            # snack = cube(randomSnack(rows, s), color=(255, 0, 0))
+        # if snake.body[0].position == snack.position:
+        #     snake.add_cube()
+        # snack = cube(randomSnack(rows, s), color=(255, 0, 0))
 
-        snake.collision()
-        redraw_window(win)
+        # snake.collision()
+        redraw_window(win, snake, playground)
+
+
+if __name__ == "__main__":
+    main()

@@ -1,12 +1,12 @@
 import pygame
-
+from cube import Cube
 
 class Snake:
     body = []
     turns = {}
 
-    def __init__(self, cube, position):
-        self.head = cube(position)
+    def __init__(self, position):
+        self.head = Cube(position)
         self.body.append(self.head)
         self.direction_x = 0
         self.direction_y = 1
