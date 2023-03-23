@@ -12,7 +12,7 @@ class Snake:
         self.direction_x = 0
         self.direction_y = 1
 
-    def move(self):
+    def move(self):  # ToDo: Repair
         # We are iterating through a cubes and move them.
         # Jeśli w danej pozycji użytkownik dokonał skrętu to w niej kostka musi skręcić,
         # jeśli to ostatni kostka usuwamy zakręt.
