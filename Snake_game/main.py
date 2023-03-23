@@ -3,61 +3,38 @@ from snake import Snake
 from cube import Cube
 from map import Map
 
-# ToDo:
-# for event in pygame.event.get():
-#     if event.type == pygame.QUIT:
-#         pygame.quit()
-#         quit()
-#
-#     keys = pygame.key.get_pressed()
-#     for key in keys:
-#         if keys[pygame.K_LEFT]:
-#             if not self.right:
-#                 self.left = True
-#                 self.right = False
-#                 self.down = False
-#                 self.up = False
-#                 self.dirnx = -1
-#                 self.dirny = 0
-#                 self.turns[self.head.pos[:]] = [self.dirnx, self.dirny]
-#             else:
-#                 pass
-#
-#         elif keys[pygame.K_RIGHT]:
-#             if not self.left:
-#                 self.left = False
-#                 self.right = True
-#                 self.down = False
-#                 self.up = False
-#                 self.dirnx = 1
-#                 self.dirny = 0
-#                 self.turns[self.head.pos[:]] = [self.dirnx, self.dirny]
-#             else:
-#                 pass
-#
-#         elif keys[pygame.K_UP]:
-#             if not self.down:
-#                 self.left = False
-#                 self.right = False
-#                 self.down = False
-#                 self.up = True
-#                 self.dirnx = 0
-#                 self.dirny = -1
-#                 self.turns[self.head.pos[:]] = [self.dirnx, self.dirny]
-#             else:
-#                 pass
-#
-#         elif keys[pygame.K_DOWN]:
-#             if not self.up:
-#                 self.left = False
-#                 self.right = False
-#                 self.down = True
-#                 self.up = False
-#                 self.dirnx = 0
-#                 self.dirny = 1
-#                 self.turns[self.head.pos[:]] = [self.dirnx, self.dirny]
-#             else:
-#                 pass
+
+def keyboard_input(snake: Snake):  # ToDo:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            quit()
+
+        keys = pygame.key.get_pressed()
+
+        if keys[pygame.K_LEFT]:
+            if snake.direction_x == 0:
+                snake.direction_x = -1
+                snake.direction_y = 0
+                snake.turns[snake.head.position] = [snake.direction_x, snake.direction_y]
+
+        elif keys[pygame.K_RIGHT]:
+            if snake.direction_x == 0:
+                snake.direction_x = 1
+                snake.direction_y = 0
+                snake.turns[snake.head.position] = [snake.direction_x, snake.direction_y]
+
+        elif keys[pygame.K_UP]:
+            if snake.direction_y == 0:
+                snake.direction_x = 0
+                snake.direction_y = -1
+                snake.turns[snake.head.position] = [snake.direction_x, snake.direction_y]
+
+        elif keys[pygame.K_DOWN]:
+            if snake.direction_y == 0:
+                snake.direction_x = 0
+                snake.direction_y = 1
+                snake.turns[snake.head.position] = [snake.direction_x, snake.direction_y]
 
 
 def redraw_window(surface):
