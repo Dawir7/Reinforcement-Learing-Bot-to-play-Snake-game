@@ -53,9 +53,10 @@ def main():
     run = True
     clock = pygame.time.Clock()
     while run:
-        pygame.time.delay(100)
         clock.tick(30)
-        # snake.move()
+        pygame.time.delay(100)
+        keyboard_input(snake)
+        snake.move()
 
         # if snake.body[0].position == snack.position:
         #     snake.add_cube()
