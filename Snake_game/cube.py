@@ -12,17 +12,17 @@ class Cube:
     def move(self):
         self.position = (self.position[0] + self.direction_x, self.position[1] + self.direction_y)
 
-    def draw(self, surface, pmap, eyes=False):
-        pygame.draw.rect(surface, (0, 255, 0), (self.position[0] * pmap.tile_size + 1,
-                                                self.position[1] * pmap.tile_size + 1,
-                                                pmap.tile_size - 2, pmap.tile_size - 2))
+    def draw(self, surface, playground, eyes=False):
+        pygame.draw.rect(surface, (0, 255, 0), (self.position[0] * playground.tile_size + 1,
+                                                self.position[1] * playground.tile_size + 1,
+                                                playground.tile_size - 2, playground.tile_size - 2))
 
         if eyes:  # ToDo: Repair hardcodes.
-            centre = pmap.tile_size // 2
+            centre = playground.tile_size // 2
             radius = 3
-            eye_one = (self.position[0] * pmap.tile_size + centre - radius, self.position[1] * pmap.tile_size + 8)
-            eye_two = (self.position[0] * pmap.tile_size + pmap.tile_size - radius * 2,
-                       self.position[1] * pmap.tile_size + 8)
+            eye_one = (self.position[0] * playground.tile_size + centre - radius,
+                       self.position[1] * playground.tile_size + 8)
+            eye_two = (self.position[0] * playground.tile_size + playground.tile_size - radius * 2,
+                       self.position[1] * playground.tile_size + 8)
             pygame.draw.circle(surface, (0, 0, 0), eye_one, radius)
             pygame.draw.circle(surface, (0, 0, 0), eye_two, radius)
-

@@ -13,28 +13,34 @@ def keyboard_input(snake: Snake):  # ToDo:
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_LEFT]:
+            print(snake.direction_x, snake.direction_y, "LEFT")
             if snake.direction_x == 0:
                 snake.direction_x = -1
                 snake.direction_y = 0
                 snake.turns[snake.head.position] = [snake.direction_x, snake.direction_y]
 
         elif keys[pygame.K_RIGHT]:
+            print(snake.direction_x, snake.direction_y, "RIGHT")
             if snake.direction_x == 0:
                 snake.direction_x = 1
                 snake.direction_y = 0
                 snake.turns[snake.head.position] = [snake.direction_x, snake.direction_y]
 
         elif keys[pygame.K_UP]:
+            print(snake.direction_x, snake.direction_y, "UP")
             if snake.direction_y == 0:
                 snake.direction_x = 0
                 snake.direction_y = -1
                 snake.turns[snake.head.position] = [snake.direction_x, snake.direction_y]
 
         elif keys[pygame.K_DOWN]:
+            print(snake.direction_x, snake.direction_y, "DOWN")
             if snake.direction_y == 0:
                 snake.direction_x = 0
                 snake.direction_y = 1
                 snake.turns[snake.head.position] = [snake.direction_x, snake.direction_y]
+
+    snake.move()
 
 
 def redraw_window(win, snake, playground):
@@ -48,7 +54,7 @@ def main():
     playground = Map()
     win = pygame.display.set_mode((playground.map_size, playground.map_size))
 
-    snake = Snake((0, 10))
+    snake = Snake((1, 10))
     # snack = Cube(Map.RandomSnack(rows, s), color=(255, 0, 0))
     run = True
     clock = pygame.time.Clock()
@@ -56,13 +62,15 @@ def main():
         clock.tick(30)
         pygame.time.delay(100)
         keyboard_input(snake)
-        snake.move()
+        # snake.move()
 
         # if snake.body[0].position == snack.position:
         #     snake.add_cube()
         # snack = cube(randomSnack(rows, s), color=(255, 0, 0))
 
-        # snake.collision()
+        if snake.collision(playground):
+            print("GAME OVER")
+            pygame.quit()
         redraw_window(win, snake, playground)
 
 

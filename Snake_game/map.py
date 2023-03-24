@@ -10,15 +10,15 @@ class Map:
         self.tile_size = self.map_size / self.rows
         self.pmap = np.zeros((self.rows, self.rows))
 
-    def draw(self, playground):
-
+    def draw(self, surface):
+        pmap_draw = np.rot90(self.pmap.copy(), 0)
         for i in range(self.rows):
             for j in range(self.rows):
-                pygame.draw.line(surface=playground,
+                pygame.draw.line(surface=surface,
                                  color=(0, 0, 0),
                                  start_pos=(i * self.tile_size, j * self.tile_size),
                                  end_pos=(i * self.tile_size, self.rows * self.tile_size))
-                pygame.draw.line(surface=playground,
+                pygame.draw.line(surface=surface,
                                  color=(0, 0, 0),
                                  start_pos=(j * self.tile_size, i * self.tile_size),
                                  end_pos=(self.rows * self.tile_size, i * self.tile_size))

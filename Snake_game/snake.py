@@ -21,26 +21,31 @@ class Snake:
                 turn = self.turns[cube.position]
                 cube.direction_x = turn[0]
                 cube.direction_y = turn[1]
-                cube.move()
                 if iteration == len(self.body) - 1:
                     self.turns.pop(cube.position)
+                cube.move()
             else:
                 cube.move()
 
-    def collision(self) -> bool:
+    def collision(self, playground) -> bool:
         for cube in self.body:
-            if cube.direction_x == -1 and cube.position[0] <= 0:  # Hit the left wall.
+            # if cube.direction_x == -1 and cube.position[0] <= 0:  # Hit the left wall.
+            #     return True
+            # elif cube.direction_x == 1 and cube.position[0] >= cube.rows - 1:  # Hit the right wall.
+            #     return True
+            # elif cube.direction_y == 1 and cube.position[1] >= cube.rows - 1:  # Hit the bottom.
+            #     return True
+            # elif cube.direction_y == -1 and cube.position[1] <= 0:  # Hit the celling.
+            #     return True
+            if cube.position[0] >= playground.rows or cube.position[0] <= 0:
                 return True
-            elif cube.direction_x == 1 and cube.position[0] >= cube.rows - 1:  # Hit the right wall.
-                return True
-            elif cube.direction_y == 1 and cube.position[1] >= cube.rows - 1:  # Hit the bottom.
-                return True
-            elif cube.direction_y == -1 and cube.position[1] <= 0:  # Hit the celling.
+            elif cube.position[1] >= playground.rows or cube.position[1] <= 0:
                 return True
             else:
                 for other_cube in self.body:
-                    if other_cube.position == cube.position:  # Hit himself.
-                        return True
+                    if cube != cube:
+                        if other_cube.position == cube.position:  # Hit himself.
+                            return True
 
         return False
 
@@ -68,9 +73,9 @@ class Snake:
         self.body[-1].direction_x = direction_x
         self.body[-1].direction_y = direction_y
 
-    def draw(self, surface, pmap):
+    def draw(self, surface, playground):
         for iteration, cube in enumerate(self.body):
             if iteration == 0:
-                cube.draw(surface, pmap, True)  # Head -> body with eyes
+                cube.draw(surface, playground, True)  # Head -> body with eyes
             else:
-                cube.draw(surface, pmap)
+                cube.draw(surface, playground)
