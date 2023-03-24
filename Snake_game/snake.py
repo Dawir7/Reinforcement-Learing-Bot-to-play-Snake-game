@@ -9,8 +9,8 @@ class Snake:
     def __init__(self, position):
         self.head = Cube(position)
         self.body.append(self.head)
-        self.direction_x = 0
-        self.direction_y = 1
+        self.direction_x = 1
+        self.direction_y = 0
 
     def move(self):  # ToDo: Repair
         # We are iterating through a cubes and move them.
@@ -37,9 +37,9 @@ class Snake:
             #     return True
             # elif cube.direction_y == -1 and cube.position[1] <= 0:  # Hit the celling.
             #     return True
-            if cube.position[0] >= playground.rows or cube.position[0] <= 0:
+            if cube.position[0] >= playground.rows or cube.position[0] < 0:
                 return True
-            elif cube.position[1] >= playground.rows or cube.position[1] <= 0:
+            elif cube.position[1] >= playground.rows or cube.position[1] < 0:
                 return True
             else:
                 for other_cube in self.body:
@@ -54,8 +54,8 @@ class Snake:
         self.body = []
         self.body.append(self.head)
         self.turns = {}
-        self.direction_x = 0
-        self.direction_y = 1
+        self.direction_x = 1
+        self.direction_y = 0
 
     def add_cube(self, cube):
         tail = self.body[-1]

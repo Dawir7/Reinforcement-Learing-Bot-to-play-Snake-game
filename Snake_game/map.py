@@ -30,7 +30,9 @@ class Map:
             on_snake = False
 
             for cube in snake.body:
-                if snack_pos == cube.position:
+
+                print(cube.position)
+                if snack_pos is cube.position:
                     on_snake = True
 
             if not on_snake:

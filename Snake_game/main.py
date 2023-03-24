@@ -13,28 +13,24 @@ def keyboard_input(snake: Snake):  # ToDo:
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_LEFT]:
-            print(snake.direction_x, snake.direction_y, "LEFT")
             if snake.direction_x == 0:
                 snake.direction_x = -1
                 snake.direction_y = 0
                 snake.turns[snake.head.position] = [snake.direction_x, snake.direction_y]
 
         elif keys[pygame.K_RIGHT]:
-            print(snake.direction_x, snake.direction_y, "RIGHT")
             if snake.direction_x == 0:
                 snake.direction_x = 1
                 snake.direction_y = 0
                 snake.turns[snake.head.position] = [snake.direction_x, snake.direction_y]
 
         elif keys[pygame.K_UP]:
-            print(snake.direction_x, snake.direction_y, "UP")
             if snake.direction_y == 0:
                 snake.direction_x = 0
                 snake.direction_y = -1
                 snake.turns[snake.head.position] = [snake.direction_x, snake.direction_y]
 
         elif keys[pygame.K_DOWN]:
-            print(snake.direction_x, snake.direction_y, "DOWN")
             if snake.direction_y == 0:
                 snake.direction_x = 0
                 snake.direction_y = 1
@@ -44,7 +40,7 @@ def keyboard_input(snake: Snake):  # ToDo:
 
 
 def redraw_window(win, snake, playground):
-    win.fill((255, 255, 255))
+    win.fill((25, 119, 207))
     playground.draw(win)
     snake.draw(win, playground)
     pygame.display.update()  # This updates the screen so we can see our rectangle
@@ -62,6 +58,7 @@ def main():
         clock.tick(30)
         pygame.time.delay(100)
         keyboard_input(snake)
+        playground.random_snack(snake)
         # snake.move()
 
         # if snake.body[0].position == snack.position:

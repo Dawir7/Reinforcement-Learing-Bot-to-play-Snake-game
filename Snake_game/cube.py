@@ -13,7 +13,7 @@ class Cube:
         self.position = (self.position[0] + self.direction_x, self.position[1] + self.direction_y)
 
     def draw(self, surface, playground, eyes=False):
-        pygame.draw.rect(surface, (0, 255, 0), (self.position[0] * playground.tile_size + 1,
+        pygame.draw.rect(surface, (47, 199, 16), (self.position[0] * playground.tile_size + 1,
                                                 self.position[1] * playground.tile_size + 1,
                                                 playground.tile_size - 2, playground.tile_size - 2))
 
