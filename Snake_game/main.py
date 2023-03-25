@@ -58,16 +58,21 @@ def main():
         clock.tick(30)
         pygame.time.delay(100)
         keyboard_input(snake)
-        playground.random_snack(snake)
+        playground.random_snack_pos(snake)
         # snake.move()
 
         # if snake.body[0].position == snack.position:
         #     snake.add_cube()
         # snack = cube(randomSnack(rows, s), color=(255, 0, 0))
 
+
+
+
         if snake.collision(playground):
             print("GAME OVER")
+            run = False
             pygame.quit()
+            break
         redraw_window(win, snake, playground)
 
 
