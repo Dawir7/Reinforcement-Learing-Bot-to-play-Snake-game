@@ -1,77 +1,60 @@
 import pygame
 from snake import Snake
-from cube import Cube
 from map import Map
 
 
-def keyboard_input(snake: Snake):  # ToDo:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            quit()
-
-        keys = pygame.key.get_pressed()
-
-        if keys[pygame.K_LEFT]:
-            if snake.direction_x == 0:
-                snake.direction_x = -1
-                snake.direction_y = 0
-                snake.turns[snake.head.position] = [snake.direction_x, snake.direction_y]
-
-        elif keys[pygame.K_RIGHT]:
-            if snake.direction_x == 0:
-                snake.direction_x = 1
-                snake.direction_y = 0
-                snake.turns[snake.head.position] = [snake.direction_x, snake.direction_y]
-
-        elif keys[pygame.K_UP]:
-            if snake.direction_y == 0:
-                snake.direction_x = 0
-                snake.direction_y = -1
-                snake.turns[snake.head.position] = [snake.direction_x, snake.direction_y]
-
-        elif keys[pygame.K_DOWN]:
-            if snake.direction_y == 0:
-                snake.direction_x = 0
-                snake.direction_y = 1
-                snake.turns[snake.head.position] = [snake.direction_x, snake.direction_y]
-
-    snake.move()
-
-
-def redraw_window(win, snake, playground):
+def redraw_window(win: pygame.display.set_mode, snake: Snake, playground: Map):
     win.fill((25, 119, 207))
     playground.draw(win)
     snake.draw(win, playground)
     pygame.display.update()  # This updates the screen so we can see our rectangle
 
 
+# ToDo: Do we need this game over window?
+# def game_over(win: pygame.display.set_mode, playground: Map, snake: Snake):
+#     """
+#         Function responsible for creating a "Game over" window after collision with non-edible ghost
+#         :param: win: instance of pygame window (pygame.display.set_mode)
+#     """
+#     pygame.font.init()
+#     win.fill((0, 0, 0))
+#     font = pygame.font.SysFont('ComicSans', 40)
+#     title = font.render('Game Over', True, (255, 255, 255))
+#     restart_button = font.render('R - Restart', True, (255, 255, 255))
+#     score = font.render(f'Score: {playground.score}', True, (255, 255, 255))
+#     show = True
+#     while show:
+#         win.blit(title, (playground.map_size / 2 - title.get_width() / 2,
+#                          playground.map_size / 4 - title.get_height() / 3))
+#         win.blit(restart_button, (playground.map_size / 2 - restart_button.get_width() / 2,
+#                                   playground.map_size / 2 - restart_button.get_height() / 2))
+#         win.blit(score, (playground.map_size / 2 - score.get_width() / 2,
+#                          playground.map_size * 3 / 4 - score.get_height() / 2))
+#         reset = snake.keyboard_input()
+#         if reset:
+#             playground.score = 0
+#             playground.pmap[playground.snack] = 0
+#         pygame.display.update()
+
+
 def main():
     playground = Map()
     win = pygame.display.set_mode((playground.map_size, playground.map_size))
 
-    snake = Snake((1, 10))
-    # snack = Cube(Map.RandomSnack(rows, s), color=(255, 0, 0))
+    snake = Snake()
     run = True
     clock = pygame.time.Clock()
     while run:
+        # ToDo: Time management.
         clock.tick(30)
         pygame.time.delay(100)
-        keyboard_input(snake)
+        snake.keyboard_input()
         playground.random_snack_pos(snake)
-        # snake.move()
-
-        # if snake.body[0].position == snack.position:
-        #     snake.add_cube()
-        # snack = cube(randomSnack(rows, s), color=(255, 0, 0))
-
-
-
 
         if snake.collision(playground):
-            print("GAME OVER")
+            print(f"GAME OVER\nSCORE: {playground.score}")
             run = False
-            pygame.quit()
+            # game_over(win, playground, snake)
             break
         redraw_window(win, snake, playground)
 
