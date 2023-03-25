@@ -57,18 +57,18 @@ class Snake:
         self.direction_x = 1
         self.direction_y = 0
 
-    def add_cube(self, cube):
+    def add_cube(self):
         tail = self.body[-1]
         direction_x, direction_y = tail.direction_x, tail.direction_y
         # We are checking in which site of tail add cube at the end of the snake.
         if direction_x == 1 and direction_y == 0:
-            self.body.append(cube((tail.position[0] - 1, tail.position[1])))
+            self.body.append(Cube((tail.position[0] - 1, tail.position[1])))
         elif direction_x == -1 and direction_y == 0:
-            self.body.append(cube((tail.position[0] + 1, tail.position[1])))
+            self.body.append(Cube((tail.position[0] + 1, tail.position[1])))
         elif direction_x == 0 and direction_y == 1:
-            self.body.append(cube((tail.position[0], tail.position[1] - 1)))
+            self.body.append(Cube((tail.position[0], tail.position[1] - 1)))
         elif direction_x == 0 and direction_y == -1:
-            self.body.append(cube((tail.position[0], tail.position[1] + 1)))
+            self.body.append(Cube((tail.position[0], tail.position[1] + 1)))
 
         self.body[-1].direction_x = direction_x
         self.body[-1].direction_y = direction_y
