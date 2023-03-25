@@ -37,15 +37,33 @@ class Snake:
             #     return True
             # elif cube.direction_y == -1 and cube.position[1] <= 0:  # Hit the celling.
             #     return True
-            if cube.position[0] >= playground.rows or cube.position[0] < 0:
-                return True
-            elif cube.position[1] >= playground.rows or cube.position[1] < 0:
-                return True
+
+
+            # teleport on walls
+            if cube.position[0] >= playground.rows:
+                cube.position = (0, cube.position[1])
+            elif cube.position[0] < 0:
+                cube.position = (playground.rows, cube.position[1])
+            elif cube.position[1] >= playground.rows:
+                cube.position = (cube.position[0], 0)
+            elif cube.position[1] < 0:
+                cube.position = (cube.position[0], playground.rows)
+
+            # wall ends game
+            # if cube.position[0] >= playground.rows or cube.position[0] < 0:
+            #     return True
+            # elif cube.position[1] >= playground.rows or cube.position[1] < 0:
+            #     return True
             else:
                 for other_cube in self.body:
                     if cube != cube:
                         if other_cube.position == cube.position:  # Hit himself.
                             return True
+
+        print([self.body[0].position, playground.snack])
+        if self.body[0].position == (playground.snack[0], playground.snack[1]):
+            playground.pmap[playground.snack] = 0
+            self.add_cube()
 
         return False
 
@@ -57,18 +75,18 @@ class Snake:
         self.direction_x = 1
         self.direction_y = 0
 
-    def add_cube(self, cube):
+    def add_cube(self):
         tail = self.body[-1]
         direction_x, direction_y = tail.direction_x, tail.direction_y
         # We are checking in which site of tail add cube at the end of the snake.
         if direction_x == 1 and direction_y == 0:
-            self.body.append(cube((tail.position[0] - 1, tail.position[1])))
+            self.body.append(Cube((tail.position[0] - 1, tail.position[1])))
         elif direction_x == -1 and direction_y == 0:
-            self.body.append(cube((tail.position[0] + 1, tail.position[1])))
+            self.body.append(Cube((tail.position[0] + 1, tail.position[1])))
         elif direction_x == 0 and direction_y == 1:
-            self.body.append(cube((tail.position[0], tail.position[1] - 1)))
+            self.body.append(Cube((tail.position[0], tail.position[1] - 1)))
         elif direction_x == 0 and direction_y == -1:
-            self.body.append(cube((tail.position[0], tail.position[1] + 1)))
+            self.body.append(Cube((tail.position[0], tail.position[1] + 1)))
 
         self.body[-1].direction_x = direction_x
         self.body[-1].direction_y = direction_y
