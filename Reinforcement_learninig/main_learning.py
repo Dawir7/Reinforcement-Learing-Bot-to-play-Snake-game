@@ -7,8 +7,8 @@ from snake import Snake
 from map import Map
 from agent import Agent
 
-# Version 0.5
-MODEL_NAME = "models/model_0v5"  # Name of the pickle file in which we store our model.
+# Version 0.6
+MODEL_NAME = "models/model_0v6"  # Name of the pickle file in which we store our model.
 
 # VISUAL = False
 # GENERATIONS = 200_000
@@ -16,7 +16,7 @@ VISUAL = True
 GENERATIONS = 30
 MAX_ITERATIONS = 10_000
 # epsilon = 1  # epsilon = 0.7 - generation * 0.01
-MIN_EPSILON = 0.001
+MIN_EPSILON = 0.000_01
 GAMMA = 0.7
 LEARNING_RATE = 0.5  # ATTENTION: From model 0v5 this is change dynamically.
 
@@ -68,8 +68,8 @@ def main(visual: bool = True):
         generation_reward = 0
         iteration = 0
         # epsilon = max(MIN_EPSILON, 0.9 - generation * 0.0008)
-        epsilon = max(MIN_EPSILON, 0.9 - generation * 0.000_1)
-        LEARNING_RATE = 0.9 - generation * 0.000_004
+        epsilon = max(MIN_EPSILON, 0.9 - generation * 0.000_05)
+        LEARNING_RATE = 0.8 - generation * 0.000_000_004
 
         if visual:
             pygame.display.set_caption(f"Snake Game, Generation: {generation}")
