@@ -1,3 +1,5 @@
+import numpy as np
+
 
 class Agent:
     def __init__(self):
@@ -17,19 +19,26 @@ class Agent:
         state = []
 
         straight = (snake.direction_x, snake.direction_y)
-        state.append(int(snake.colision(playground, straight)))
+        state.append(int(snake.collision(playground, straight)[0]))
         left = snake.get_left()
-        state.append(int(snake.colision(playground, left)))
+        state.append(int(snake.collision(playground, left)[0]))
         right = snake.get_right()
-        state.append(int(snake.colision(playground, right)))
+        state.append(int(snake.collision(playground, right)[0]))
 
         directions = snake.move_direction()
         for direction in directions:
             state.append(direction)
 
-        snack_directions = snake.snack_direction()
+        snack_directions = snake.snack_direction(playground)
         for snack_direction in snack_directions:
             state.append(snack_direction)
 
         return state
 
+    @staticmethod
+    def make_binary(state: list) -> str:
+        binary_state = ""
+        for i in state:
+            binary_state += str(i)
+
+        return binary_state
