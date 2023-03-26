@@ -65,14 +65,14 @@ class Snake:
         self.move()
 
     def collision(self, playground, move: tuple[int, int] = (0, 0), add_snack: bool = False) -> tuple[bool, int]:
-        reward = 1  # 2 - nothing, +10 - snack, -10 - wall, -8 - himself,
+        reward = 1  # 0 - nothing, +10 - snack, -10 - wall, -8 - himself,
         for count, cube in enumerate(self.body):
             # wall ends game
             if cube.position[0] + move[0] >= playground.rows or cube.position[0] + move[0] < 0:
-                reward += -10
+                reward += -50
                 return True, reward
             elif cube.position[1] + move[1] >= playground.rows or cube.position[1] + move[1] < 0:
-                reward += -10
+                reward += -50
                 return True, reward
             else:
                 for second_cube_count, second_cube in enumerate(self.body):
@@ -80,14 +80,14 @@ class Snake:
 
                         if second_cube.position[0] + move[1] == cube.position[0] + move[1] and\
                            second_cube.position[1] + move[1] == cube.position[1] + move[1]:  # Hit himself.
-                            reward += -8
+                            reward += -40
                             return True, reward
 
         if self.body[0].position == playground.snack and add_snack:
             playground.pmap[playground.snack] = 0
             self.add_cube()
             playground.score += 1
-            reward += 10
+            reward += 80
 
         return False, reward
 
