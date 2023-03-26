@@ -7,16 +7,18 @@ from snake import Snake
 from map import Map
 from agent import Agent
 
-# Version 0.1
-MODEL_NAME = "model_0v1"  # Name of the pickle file in which we store our model.
+# Version 0.2
+MODEL_NAME = "model_0v2"  # Name of the pickle file in which we store our model.
 
 VISUAL = False
-GENERATIONS = 20_000
+GENERATIONS = 200_000
+# VISUAL = True
+# GENERATIONS = 20
 MAX_ITERATIONS = 10_000
 # epsilon = 1  # epsilon = 0.7 - generation * 0.01
 MIN_EPSILON = 0.001
-GAMMA = 0.5
-LEARNING_RATE = 0.7
+GAMMA = 0.6
+LEARNING_RATE = 0.8
 
 
 def redraw_window(win: pygame.display.set_mode, snake: Snake, playground: Map):
@@ -76,7 +78,7 @@ def main(visual: bool = True):
                 pygame.time.delay(20)
                 redraw_window(win, snake, playground)
 
-            epsilon = max(MIN_EPSILON, 0.85 - generation * 0.005)
+            epsilon = max(MIN_EPSILON, 0.9 - generation * 0.001)
             # Maybe it can go to agent as get_action.
             # Action ==> 0 - straight, 1 - left, 2 - right
             if np.random.uniform(0, 1) < epsilon:
