@@ -38,54 +38,78 @@ class Snake:
 
             keys = pygame.key.get_pressed()
 
-            if keys[pygame.K_LEFT]:
-                if self.direction_x == 0:
-                    self.direction_x = -1
-                    self.direction_y = 0
-                    self.turns[self.head.position] = [self.direction_x, self.direction_y]
-
-            elif keys[pygame.K_RIGHT]:
-                if self.direction_x == 0:
-                    self.direction_x = 1
-                    self.direction_y = 0
-                    self.turns[self.head.position] = [self.direction_x, self.direction_y]
-
-            elif keys[pygame.K_UP]:
-                if self.direction_y == 0:
-                    self.direction_x = 0
-                    self.direction_y = -1
-                    self.turns[self.head.position] = [self.direction_x, self.direction_y]
-
-            elif keys[pygame.K_DOWN]:
-                if self.direction_y == 0:
-                    self.direction_x = 0
-                    self.direction_y = 1
-                    self.turns[self.head.position] = [self.direction_x, self.direction_y]
+            # if keys[pygame.K_LEFT]:
+            #     if self.direction_x == 0:
+            #         self.direction_x = -1
+            #         self.direction_y = 0
+            #         self.turns[self.head.position] = [self.direction_x, self.direction_y]
+            #
+            # elif keys[pygame.K_RIGHT]:
+            #     if self.direction_x == 0:
+            #         self.direction_x = 1
+            #         self.direction_y = 0
+            #         self.turns[self.head.position] = [self.direction_x, self.direction_y]
+            #
+            # elif keys[pygame.K_UP]:
+            #     if self.direction_y == 0:
+            #         self.direction_x = 0
+            #         self.direction_y = -1
+            #         self.turns[self.head.position] = [self.direction_x, self.direction_y]
+            #
+            # elif keys[pygame.K_DOWN]:
+            #     if self.direction_y == 0:
+            #         self.direction_x = 0
+            #         self.direction_y = 1
+            #         self.turns[self.head.position] = [self.direction_x, self.direction_y]
 
         self.move()
 
-    def collision(self, playground, move: tuple[int, int] = (0, 0)) -> bool:
+    def collision(self, playground, move: tuple[int, int] = (0, 0), add_snack: bool = False) -> tuple[bool, int]:
+        reward = 0  # 0 - nothing, +10 - snack, -10 - wall, -8 - himself,
         for count, cube in enumerate(self.body):
             # wall ends game
             if cube.position[0] + move[0] >= playground.rows or cube.position[0] + move[0] < 0:
-                return True
+                reward += -10
+                return True, reward
             elif cube.position[1] + move[1] >= playground.rows or cube.position[1] + move[1] < 0:
-                return True
+                reward += -10
+                return True, reward
             else:
                 for second_cube_count, second_cube in enumerate(self.body):
                     if second_cube_count != count:
 
                         if second_cube.position[0] + move[1] == cube.position[0] + move[1] and\
                            second_cube.position[1] + move[1] == cube.position[1] + move[1]:  # Hit himself.
+                            reward += -8
+                            return True, reward
 
-                            return True
-
-        if self.body[0].position == playground.snack:
+        if self.body[0].position == playground.snack and add_snack:
             playground.pmap[playground.snack] = 0
             self.add_cube()
             playground.score += 1
+            reward += 10
 
-        return False
+        return False, reward
+
+    def move_action(self, action):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+
+        # Action ==> 0 - straight, 1 - left, 2 - right
+        if action == 0:
+            pass
+
+        elif action == 1:
+            self.direction_x, self.direction_y = self.get_left()
+            self.turns[self.head.position] = [self.direction_x, self.direction_y]
+
+        elif action == 2:
+            self.direction_x, self.direction_y = self.get_right()
+            self.turns[self.head.position] = [self.direction_x, self.direction_y]
+
+        self.move()
 
     def get_left(self):  # ToDo: Maybe we can do it better.
         if self.direction_x == 0 and self.direction_y == 1:
