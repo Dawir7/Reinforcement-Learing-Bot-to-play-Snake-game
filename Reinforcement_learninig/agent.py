@@ -1,6 +1,3 @@
-import numpy as np
-
-
 class Agent:
     def __init__(self):
         self.amount_of_games = 0

@@ -65,7 +65,7 @@ class Snake:
         self.move()
 
     def collision(self, playground, move: tuple[int, int] = (0, 0), add_snack: bool = False) -> tuple[bool, int]:
-        reward = 0  # 0 - nothing, +10 - snack, -10 - wall, -8 - himself,
+        reward = 2  # 2 - nothing, +10 - snack, -10 - wall, -8 - himself,
         for count, cube in enumerate(self.body):
             # wall ends game
             if cube.position[0] + move[0] >= playground.rows or cube.position[0] + move[0] < 0:
@@ -91,11 +91,12 @@ class Snake:
 
         return False, reward
 
-    def move_action(self, action):
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                quit()
+    def move_action(self, action, visual: bool):
+        if visual:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    quit()
 
         # Action ==> 0 - straight, 1 - left, 2 - right
         if action == 0:
