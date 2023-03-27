@@ -9,7 +9,16 @@ class Map:
         self.map_size = 500
         self.tile_size = self.map_size / self.rows
         self.pmap = np.zeros((self.rows, self.rows))
-        self.snack = []
+        self.snack = (5, 12)  # 5 12
+        self.pmap[self.snack] = 1
+        self.const_snacks = [(6, 4), (13, 13), (4, 17)]
+        self.score = 0
+
+    def reset(self):
+        self.pmap = np.zeros((self.rows, self.rows))
+        self.snack = (5, 12)  # 5 12
+        self.pmap[self.snack] = 1
+        self.const_snacks = [(6, 4), (13, 13), (4, 17)]
         self.score = 0
 
     def draw(self, surface: pygame.display.set_mode):
@@ -30,8 +39,15 @@ class Map:
                          )
 
     def random_snack_pos(self, snake):
+        if len(self.const_snacks) > 0:
+            #print(self.const_snacks)
+            if 1 not in self.pmap:
+                self.snack = self.const_snacks[-1]
+                self.const_snacks.pop()
+                self.pmap[self.snack] = 1
 
-        if 1 not in self.pmap:
+
+        elif 1 not in self.pmap:
             while True:
                 snack_pos = np.random.randint(0, self.rows, 2)
                 snack_pos = (snack_pos[0], snack_pos[1])

@@ -8,13 +8,13 @@ from map import Map
 from agent import Agent
 
 # Version 0.7
-MODEL_NAME = "models/model_0v7"  # Name of the pickle file in which we store our model.
+MODEL_NAME = "models/model_0v9"  # Name of the pickle file in which we store our model.
 
-# VISUAL = False
+VISUAL = False
 # GENERATIONS = 200_000
-VISUAL = True
-GENERATIONS = 30
-MAX_ITERATIONS = 10_000
+#VISUAL = True
+GENERATIONS = 100_000
+MAX_ITERATIONS = 10_000 # max iterations in game
 # epsilon = 1  # epsilon = 0.7 - generation * 0.01
 MIN_EPSILON = 0.000_001
 GAMMA = 0.8
@@ -40,7 +40,6 @@ def main(visual: bool = True):
     except FileNotFoundError:
         q_table = np.zeros((2 ** 11, 3))
         generation = 0
-
     # Classes
     agent = Agent()
     playground = Map()
@@ -63,14 +62,14 @@ def main(visual: bool = True):
 
         # It should work as proper reset, but who knows...
         snake.reset()
-        playground.pmap[playground.snack] = 0
-        playground.score = 0
+        playground.reset()
+
 
         # game_over = False
         generation_reward = 0
         iteration = 0
         # epsilon = max(MIN_EPSILON, 0.9 - generation * 0.0008)
-        epsilon = max(MIN_EPSILON, 0.9 - generation * 0.000_05)
+        epsilon = max(MIN_EPSILON, 0.9 - generation * 0.000_000_005)
         LEARNING_RATE = max(0.95 - generation * 0.000_000_004, MIN_LEARNING_RATE)
 
         if visual:
@@ -120,10 +119,14 @@ def main(visual: bool = True):
                 print(f"SCORE: {playground.score}")
                 print(f"Reward: {reward}, time: {iteration} iterations")
 
+
+
         generations_rewards.append(generation_reward)
         generation_time.append(iteration)
         # print(f"Rewards : {generations_rewards}")
         # print(f"Time : {generation_time}")
+        if generation % 10_000 == 0:
+            print(generation, datetime.timedelta(milliseconds=int(np.sum(generation_time[-10_000:-1]))))
 
     print(f"\nTime of leaning last: {datetime.datetime.now() - start}, for {GENERATIONS} generations.")
     print(f"Best score was: {best_score} and best time was {best_time}.")
