@@ -32,6 +32,7 @@ def redraw_window(win: pygame.display.set_mode, snake: Snake, playground: Map):
 
 def main(visual: bool = True):
     start = datetime.datetime.now()
+    st2 = datetime.datetime.now()
     best_score = 0
     best_time = 0
     # MODEL
@@ -127,7 +128,8 @@ def main(visual: bool = True):
         # print(f"Rewards : {generations_rewards}")
         # print(f"Time : {generation_time}")
         if generation % 10_000 == 0:
-            print(generation, datetime.timedelta(milliseconds=int(np.sum(generation_time[-10_000:-1]))))
+            print(generation, datetime.datetime.now() - st2)
+            st2 = datetime.datetime.now()
 
     print(f"\nTime of leaning last: {datetime.datetime.now() - start}, for {GENERATIONS} generations.")
     print(f"Best score was: {best_score} and best time was {best_time}.")
