@@ -7,18 +7,19 @@ from snake import Snake
 from map import Map
 from agent import Agent
 
-# Version 0.7
-MODEL_NAME = "models/model_0v9"  # Name of the pickle file in which we store our model.
+# Version 0.8
+MODEL_NAME = "models/model_0v8"  # Name of the pickle file in which we store our model.
 
 VISUAL = False
-# GENERATIONS = 200_000
-#VISUAL = True
 GENERATIONS = 100_000
-MAX_ITERATIONS = 10_000 # max iterations in game
+# VISUAL = True
+# GENERATIONS = 30
+MAX_ITERATIONS = 10_000  # max iterations in game
 # epsilon = 1  # epsilon = 0.7 - generation * 0.01
 MIN_EPSILON = 0.000_001
-GAMMA = 0.8
-LEARNING_RATE = 0.5  # ATTENTION: From model 0v5 this is change dynamically.
+epsilon_dec = 0.000_01
+GAMMA = 0.5
+LEARNING_RATE = 0.75  # ATTENTION: From model 0v5 this is change dynamically.
 MIN_LEARNING_RATE = 0.3
 
 
@@ -69,8 +70,8 @@ def main(visual: bool = True):
         generation_reward = 0
         iteration = 0
         # epsilon = max(MIN_EPSILON, 0.9 - generation * 0.0008)
-        epsilon = max(MIN_EPSILON, 0.9 - generation * 0.000_000_005)
-        LEARNING_RATE = max(0.95 - generation * 0.000_000_004, MIN_LEARNING_RATE)
+        epsilon = max(MIN_EPSILON, 0.9 - generation * epsilon_dec)
+        # LEARNING_RATE = max(0.95 - generation * 0.000_000_004, MIN_LEARNING_RATE)
 
         if visual:
             pygame.display.set_caption(f"Snake Game, Generation: {generation}")
@@ -99,7 +100,7 @@ def main(visual: bool = True):
 
             bellman_equation = (1 - LEARNING_RATE) * q_table[int(current_binary_state, 2), action] + LEARNING_RATE *\
                                (reward + GAMMA * max(q_table[int(next_binary_state, 2), :]))
-            q_table[int(current_binary_state, 2), np.argmax(action)] = bellman_equation
+            q_table[int(current_binary_state, 2), action] = bellman_equation
 
             generation_reward += reward
 
