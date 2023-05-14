@@ -2,24 +2,40 @@ import pygame
 import numpy as np
 import pickle
 import datetime
-
+import os
 from snake import Snake
 from map import Map
 from agent import Agent
 
-# Version 0.8
-MODEL_NAME = "models/model_0v8"  # Name of the pickle file in which we store our model.
+# Version 1.1
+MODEL_DIR = "models"
+MODEL_NAME = "model_1v7"  # Name of the pickle file in which we store our model.
+MODEL_PATH = os.path.join(MODEL_DIR, MODEL_NAME)
+# MODEL_NAME = "models/Best_model"  # Name of the pickle file in which we store our model.
 
-VISUAL = False
-GENERATIONS = 100_000
-# VISUAL = True
-# GENERATIONS = 30
-MAX_ITERATIONS = 10_000  # max iterations in game
-# epsilon = 1  # epsilon = 0.7 - generation * 0.01
-MIN_EPSILON = 0.000_001
-epsilon_dec = 0.000_01
-GAMMA = 0.5
-LEARNING_RATE = 0.75  # ATTENTION: From model 0v5 this is change dynamically.
+GATHER_DATA = True
+DATA_DIR = r"..\data"
+DATA_PATH = os.path.join(DATA_DIR, f"data_{MODEL_NAME}_dis")
+
+learn = 1
+if learn:
+    VISUAL = False
+    GENERATIONS = 50
+    save = False
+    epsilon_dec = 0.000_03
+else:
+    VISUAL = True
+    GENERATIONS = 30
+    save = False
+    epsilon_dec = 0.1
+
+
+MAX_ITERATIONS = 7_000  # max iterations in game # Dropped to 5_000!!!
+MIN_EPSILON = 0.0001
+
+epsilon_dec = 0.1
+GAMMA = 0.4
+LEARNING_RATE = 0.2
 MIN_LEARNING_RATE = 0.3
 
 
@@ -36,12 +52,23 @@ def main(visual: bool = True):
     best_score = 0
     best_time = 0
     # MODEL
-    try:
-        with open(f"{MODEL_NAME}", "rb") as f:
+    if os.path.isfile(MODEL_PATH):
+        with open(MODEL_PATH, 'rb') as f:
             q_table, generation = pickle.load(f)
-    except FileNotFoundError:
+    else:
+        if not os.path.isdir(MODEL_DIR):
+            os.mkdir(MODEL_DIR)
         q_table = np.zeros((2 ** 11, 3))
         generation = 0
+
+    if os.path.isfile(DATA_PATH):
+        with open(DATA_PATH, 'rb') as f:
+            gameplay_data = pickle.load(f)
+    else:
+        if not os.path.isdir(DATA_DIR):
+            os.mkdir(DATA_DIR)
+        gameplay_data = []
+
     # Classes
     agent = Agent()
     playground = Map()
@@ -66,7 +93,6 @@ def main(visual: bool = True):
         snake.reset()
         playground.reset()
 
-
         # game_over = False
         generation_reward = 0
         iteration = 0
@@ -90,6 +116,10 @@ def main(visual: bool = True):
                 action = np.random.randint(3)
             else:
                 action = np.argmax(q_table[int(current_binary_state, 2), :])
+                probability = max(q_table[int(current_binary_state, 2), :])
+
+            if GATHER_DATA:
+                gameplay_data.append([current_state, probability])
 
             snake.move_action(action, visual)
             playground.random_snack_pos(snake)
@@ -101,16 +131,19 @@ def main(visual: bool = True):
 
             bellman_equation = (1 - LEARNING_RATE) * q_table[int(current_binary_state, 2), action] + LEARNING_RATE *\
                                (reward + GAMMA * max(q_table[int(next_binary_state, 2), :]))
+            # bellman_equation = max(q_table[int(next_binary_state, 2), :]) + LEARNING_RATE * (reward + GAMMA + (
+            #             max(q_table[int(next_binary_state, 2), :]) - q_table[int(current_binary_state, 2), action]))
             q_table[int(current_binary_state, 2), action] = bellman_equation
 
             generation_reward += reward
 
             if game_over:
-                # ToDo: Add some kind of a delay/freeze so we know new generation is coming.
-                # print(f"\n\nGAME OVER, GENERATION {generation}, LAST: {iteration} Iterations")
-                # print(f"Achieved Score: {playground.score}\n\n")
                 if playground.score > best_score:
                     best_score = playground.score
+                    if best_score > 10 and save:
+                        with open(f"models/Best_model", "wb") as f:
+                            data = (q_table, generation)
+                            pickle.dump(data, f)
                 if iteration > best_time:
                     best_time = iteration
                 break
@@ -121,23 +154,32 @@ def main(visual: bool = True):
                 print(f"SCORE: {playground.score}")
                 print(f"Reward: {reward}, time: {iteration} iterations")
 
-
-
         generations_rewards.append(generation_reward)
         generation_time.append(iteration)
         # print(f"Rewards : {generations_rewards}")
         # print(f"Time : {generation_time}")
-        if generation % 10_000 == 0:
-            print(generation, datetime.datetime.now() - st2)
+        if generation % 100 == 0:
+            print(generation, datetime.datetime.now() - st2, best_score, best_time)
+            if save:
+                with open(MODEL_PATH, "wb") as f:
+                    data = (q_table, generation)
+                    pickle.dump(data, f)
+            if GATHER_DATA:
+                with open(DATA_PATH, "wb") as f:
+                    pickle.dump(gameplay_data, f)
             st2 = datetime.datetime.now()
 
     print(f"\nTime of leaning last: {datetime.datetime.now() - start}, for {GENERATIONS} generations.")
     print(f"Best score was: {best_score} and best time was {best_time}.")
     print(f"Age: {generation} generations.")
 
-    with open(f"{MODEL_NAME}", "wb") as f:
-        data = (q_table, generation)
-        pickle.dump(data, f)
+    if save:
+        with open(MODEL_PATH, "wb") as f:
+            data = (q_table, generation)
+            pickle.dump(data, f)
+    if GATHER_DATA:
+        with open(DATA_PATH, "wb") as f:
+            pickle.dump(gameplay_data, f)
 
 
 if __name__ == "__main__":
